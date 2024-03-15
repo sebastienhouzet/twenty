@@ -36,7 +36,7 @@ prod-front-run:
 	@docker run -d -p 3001:3000 --name twenty-front twenty-front
 
 prod-server-build:
-	@cd ../.. && docker build -f ./packages/twenty-docker/prod/twenty-server/Dockerfile --no-cache --tag twenty-server . && cd -
+	@cd ../.. && docker build -f ./packages/twenty-docker/prod/twenty-server/Dockerfile --tag twenty-server . && cd -
 
 prod-server-run:
 	@docker run -d -p 3000:3000 --name twenty-server twenty-server

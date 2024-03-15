@@ -14,8 +14,11 @@ RUN yarn
 
 RUN npx nx reset
 RUN npx nx run twenty-server:build
+RUN mv /app/packages/twenty-server/dist /app/packages/twenty-server/build
 RUN npx nx run twenty-server:build:packageJson
 RUN mv /app/packages/twenty-server/dist/package.json /app/packages/twenty-server/package.json
+RUN rm -rf /app/packages/twenty-server/dist
+RUN mv /app/packages/twenty-server/build /app/packages/twenty-server/dist
 
 WORKDIR /app
 RUN yarn workspaces focus --production twenty-emails twenty-server
