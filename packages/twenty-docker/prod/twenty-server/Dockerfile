@@ -18,7 +18,7 @@ RUN npx nx run twenty-server:build:packageJson
 RUN mv /app/packages/twenty-server/dist/package.json /app/packages/twenty-server/package.json
 
 WORKDIR /app
-RUN yarn workspaces focus twenty-emails twenty-server
+RUN yarn workspaces focus twenty-emails twenty-server --production
 
 FROM node:18.17.1-alpine as twenty-server
 
