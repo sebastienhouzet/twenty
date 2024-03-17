@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 
 import { useSortDropdown } from '@/object-record/object-sort-dropdown/hooks/useSortDropdown';
 import { Sort } from '@/object-record/object-sort-dropdown/types/Sort';
-import { useViewScopedStates } from '@/views/hooks/internal/useViewScopedStates';
+import { useViewStates } from '@/views/hooks/internal/useViewStates';
 import { isDefined } from '~/utils/isDefined';
 
 type ViewBarSortEffectProps = {
@@ -15,10 +15,10 @@ export const ViewBarSortEffect = ({
   sortDropdownId,
   onSortSelect,
 }: ViewBarSortEffectProps) => {
-  const { availableSortDefinitionsState } = useViewScopedStates();
+  const { availableSortDefinitionsState } = useViewStates();
 
   const availableSortDefinitions = useRecoilValue(
-    availableSortDefinitionsState,
+    availableSortDefinitionsState(),
   );
 
   const { setAvailableSortDefinitions, setOnSortSelect } = useSortDropdown({

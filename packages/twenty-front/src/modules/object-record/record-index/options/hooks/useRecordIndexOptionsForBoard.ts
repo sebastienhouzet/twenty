@@ -8,8 +8,7 @@ import { useRecordBoard } from '@/object-record/record-board/hooks/useRecordBoar
 import { FieldMetadata } from '@/object-record/record-field/types/FieldMetadata';
 import { recordIndexFieldDefinitionsState } from '@/object-record/record-index/states/recordIndexFieldDefinitionsState';
 import { ColumnDefinition } from '@/object-record/record-table/types/ColumnDefinition';
-import { useViewFields } from '@/views/hooks/internal/useViewFields';
-import { useViews } from '@/views/hooks/internal/useViews';
+import { useViewBar } from '@/views/hooks/useViewBar';
 import { GraphQLView } from '@/views/types/GraphQLView';
 import { mapBoardFieldDefinitionsToViewFields } from '@/views/utils/mapBoardFieldDefinitionsToViewFields';
 import { mapArrayToObject } from '~/utils/array/mapArrayToObject';
@@ -30,8 +29,7 @@ export const useRecordIndexOptionsForBoard = ({
   const [recordIndexFieldDefinitions, setRecordIndexFieldDefinitions] =
     useRecoilState(recordIndexFieldDefinitionsState());
 
-  const { persistViewFields } = useViewFields(viewBarId);
-  const { updateView } = useViews(viewBarId);
+  const { upsertViewFields, updateView } = useViewBar(viewBarId);
   const { getIsCompactModeActiveState } = useRecordBoard(recordBoardId);
 
   const [isCompactModeActive, setIsCompactModeActive] = useRecoilState(
@@ -111,11 +109,11 @@ export const useRecordIndexOptionsForBoard = ({
       ].map((field, index) => ({ ...field, position: index }));
 
       setRecordIndexFieldDefinitions(updatedFields);
-      persistViewFields(mapBoardFieldDefinitionsToViewFields(updatedFields));
+      upsertViewFields(mapBoardFieldDefinitionsToViewFields(updatedFields));
     },
     [
       hiddenBoardFields,
-      persistViewFields,
+      upsertViewFields,
       setRecordIndexFieldDefinitions,
       visibleBoardFields,
     ],
@@ -172,14 +170,14 @@ export const useRecordIndexOptionsForBoard = ({
 
       setRecordIndexFieldDefinitions(updatedFieldsDefinitions);
 
-      persistViewFields(
+      upsertViewFields(
         mapBoardFieldDefinitionsToViewFields(updatedFieldsDefinitions),
       );
     },
     [
       recordIndexFieldDefinitionsByKey,
       setRecordIndexFieldDefinitions,
-      persistViewFields,
+      upsertViewFields,
       availableColumnDefinitions,
       visibleBoardFields,
       recordIndexFieldDefinitions,

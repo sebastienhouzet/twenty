@@ -115,22 +115,20 @@ export const RecordIndexContainer = ({
               viewType={recordIndexViewType ?? ViewType.Table}
             />
           }
+          onCurrentViewChange={(view) => {
+            if (!view) {
+              return;
+            }
+
+            onViewFieldsChange(view.viewFields);
+            setTableFilters(mapViewFiltersToFilters(view.viewFilters));
+            setRecordIndexFilters(mapViewFiltersToFilters(view.viewFilters));
+            setTableSorts(mapViewSortsToSorts(view.viewSorts));
+            setRecordIndexSorts(mapViewSortsToSorts(view.viewSorts));
+            setRecordIndexViewType(view.type);
+            setRecordIndexIsCompactModeActive(view.isCompact);
+          }}
           optionsDropdownScopeId={RECORD_INDEX_OPTIONS_DROPDOWN_ID}
-          onViewFieldsChange={onViewFieldsChange}
-          onViewFiltersChange={(viewFilters) => {
-            setTableFilters(mapViewFiltersToFilters(viewFilters));
-            setRecordIndexFilters(mapViewFiltersToFilters(viewFilters));
-          }}
-          onViewSortsChange={(viewSorts) => {
-            setTableSorts(mapViewSortsToSorts(viewSorts));
-            setRecordIndexSorts(mapViewSortsToSorts(viewSorts));
-          }}
-          onViewTypeChange={(viewType: ViewType) => {
-            setRecordIndexViewType(viewType);
-          }}
-          onViewCompactModeChange={(isCompactModeActive: boolean) => {
-            setRecordIndexIsCompactModeActive(isCompactModeActive);
-          }}
         />
         <RecordIndexViewBarEffect
           objectNamePlural={objectNamePlural}

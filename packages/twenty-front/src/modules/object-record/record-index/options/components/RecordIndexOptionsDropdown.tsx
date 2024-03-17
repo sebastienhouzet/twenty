@@ -1,3 +1,5 @@
+import { useSetRecoilState } from 'recoil';
+
 import { RecordIndexOptionsDropdownButton } from '@/object-record/record-index/options/components/RecordIndexOptionsDropdownButton';
 import { RecordIndexOptionsDropdownContent } from '@/object-record/record-index/options/components/RecordIndexOptionsDropdownContent';
 import { RECORD_INDEX_OPTIONS_DROPDOWN_ID } from '@/object-record/record-index/options/constants/RecordIndexOptionsDropdownId';
@@ -19,7 +21,8 @@ export const RecordIndexOptionsDropdown = ({
   objectNameSingular,
   viewType,
 }: RecordIndexOptionsDropdownProps) => {
-  const { setViewEditMode } = useViewBar();
+  const { viewEditModeState } = useViewBar();
+  const setViewEditMode = useSetRecoilState(viewEditModeState());
   const { scopeId } = useRecordTableStates(recordIndexId);
 
   return (

@@ -68,9 +68,7 @@ export const useLoadRecordIndexBoard = ({
     orderBy,
   });
 
-  const { setEntityCountInCurrentView } = useViewBar({
-    viewBarId,
-  });
+  const { setEntityCountInCurrentView } = useViewBar(viewBarId);
 
   const setIsCompactModeActive = useSetRecoilState(
     getIsCompactModeActiveState(),

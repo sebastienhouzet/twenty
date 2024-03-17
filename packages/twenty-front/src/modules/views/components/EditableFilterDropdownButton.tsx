@@ -32,7 +32,7 @@ export const EditableFilterDropdownButton = ({
 
   const { closeDropdown } = useDropdown(viewFilterDropdownId);
 
-  const { removeViewFilter } = useViewBar();
+  const { removeUnsavedViewFilter } = useViewBar();
 
   useEffect(() => {
     const filterDefinition = availableFilterDefinitions.find(
@@ -57,15 +57,15 @@ export const EditableFilterDropdownButton = ({
   const handleRemove = () => {
     closeDropdown();
 
-    removeViewFilter(viewFilter.fieldMetadataId);
+    removeUnsavedViewFilter(viewFilter.fieldMetadataId);
   };
 
   const handleDropdownClickOutside = useCallback(() => {
     const { value, fieldMetadataId } = viewFilter;
     if (!value) {
-      removeViewFilter(fieldMetadataId);
+      removeUnsavedViewFilter(fieldMetadataId);
     }
-  }, [viewFilter, removeViewFilter]);
+  }, [viewFilter, removeUnsavedViewFilter]);
 
   return (
     <Dropdown

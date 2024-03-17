@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import {
   IconChevronDown,
@@ -20,10 +20,11 @@ import { MenuItem } from '@/ui/navigation/menu-item/components/MenuItem';
 import { MOBILE_VIEWPORT } from '@/ui/theme/constants/MobileViewport';
 import { HotkeyScope } from '@/ui/utilities/hotkey/types/HotkeyScope';
 import { VIEWS_DROPDOWN_ID } from '@/views/constants/ViewsDropdownId';
+import { useGetCurrentView } from '@/views/hooks/useGetCurrentView';
 import { useViewBar } from '@/views/hooks/useViewBar';
 import { isDefined } from '~/utils/isDefined';
 
-import { useViewScopedStates } from '../hooks/internal/useViewScopedStates';
+import { useViewStates } from '../hooks/internal/useViewStates';
 
 const StyledBoldDropdownMenuItemsContainer = styled(DropdownMenuItemsContainer)`
   font-weight: ${({ theme }) => theme.font.weight.regular};
@@ -65,18 +66,16 @@ export const ViewsDropdownButton = ({
   optionsDropdownScopeId,
 }: ViewsDropdownButtonProps) => {
   const theme = useTheme();
-  const { removeView, changeViewInUrl } = useViewBar();
 
-  const { viewsState, currentViewSelector, entityCountInCurrentViewState } =
-    useViewScopedStates();
+  const { removeView, setCurrentViewId } = useViewBar();
+  const { entityCountInCurrentViewState, viewEditModeState } = useViewStates();
+  const { currentView, views } = useGetCurrentView();
 
-  const views = useRecoilValue(viewsState);
-  const currentView = useRecoilValue(currentViewSelector);
   const entityCountInCurrentView = useRecoilValue(
-    entityCountInCurrentViewState,
+    entityCountInCurrentViewState(),
   );
 
-  const { setViewEditMode, setCurrentViewId, loadView } = useViewBar();
+  const setViewEditMode = useSetRecoilState(viewEditModeState());
 
   const {
     isDropdownOpen: isViewsDropdownOpen,
@@ -89,11 +88,10 @@ export const ViewsDropdownButton = ({
 
   const handleViewSelect = useRecoilCallback(
     () => async (viewId: string) => {
-      changeViewInUrl(viewId);
-      loadView(viewId);
+      setCurrentViewId(viewId);
       closeViewsDropdown();
     },
-    [changeViewInUrl, closeViewsDropdown, loadView],
+    [closeViewsDropdown, setCurrentViewId],
   );
 
   const handleAddViewButtonClick = () => {
@@ -108,7 +106,6 @@ export const ViewsDropdownButton = ({
     viewId: string,
   ) => {
     event.stopPropagation();
-    changeViewInUrl(viewId);
     setCurrentViewId(viewId);
     setViewEditMode('edit');
     onViewEditModeChange?.();
@@ -118,11 +115,11 @@ export const ViewsDropdownButton = ({
 
   const handleDeleteViewButtonClick = async (
     event: MouseEvent<HTMLButtonElement>,
-    viewId: string,
+    _viewId: string,
   ) => {
     event.stopPropagation();
 
-    await removeView(viewId);
+    await removeView();
     closeViewsDropdown();
   };
 

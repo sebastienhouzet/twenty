@@ -34,9 +34,7 @@ export const RecordIndexTableContainerEffect = ({
   const { columnDefinitions } =
     useColumnDefinitionsFromFieldMetadata(objectMetadataItem);
 
-  const { setEntityCountInCurrentView } = useViewBar({
-    viewBarId,
-  });
+  const { setEntityCountInCurrentView } = useViewBar(viewBarId);
 
   useEffect(() => {
     setAvailableTableColumns(columnDefinitions);

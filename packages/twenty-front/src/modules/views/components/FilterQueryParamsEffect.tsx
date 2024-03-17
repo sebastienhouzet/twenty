@@ -1,17 +1,15 @@
 import { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import { useFiltersFromQueryParams } from '@/views/hooks/internal/useFiltersFromQueryParams';
-import { useViewScopedStates } from '@/views/hooks/internal/useViewScopedStates';
+import { useViewStates } from '@/views/hooks/internal/useViewStates';
 import { useViewBar } from '@/views/hooks/useViewBar';
 
 export const FilterQueryParamsEffect = () => {
   const { hasFiltersQueryParams, getFiltersFromQueryParams } =
     useFiltersFromQueryParams();
-  const { currentViewFiltersState, onViewFiltersChangeState } =
-    useViewScopedStates();
-  const setCurrentViewFilters = useSetRecoilState(currentViewFiltersState);
-  const onViewFiltersChange = useRecoilValue(onViewFiltersChangeState);
+  const { unsavedViewFiltersState } = useViewStates();
+  const setCurrentViewFilters = useSetRecoilState(unsavedViewFiltersState());
   const { resetViewBar } = useViewBar();
 
   useEffect(() => {
@@ -20,7 +18,6 @@ export const FilterQueryParamsEffect = () => {
     getFiltersFromQueryParams().then((filtersFromParams) => {
       if (Array.isArray(filtersFromParams)) {
         setCurrentViewFilters(filtersFromParams);
-        onViewFiltersChange?.(filtersFromParams);
       }
     });
 
@@ -30,7 +27,6 @@ export const FilterQueryParamsEffect = () => {
   }, [
     getFiltersFromQueryParams,
     hasFiltersQueryParams,
-    onViewFiltersChange,
     resetViewBar,
     setCurrentViewFilters,
   ]);

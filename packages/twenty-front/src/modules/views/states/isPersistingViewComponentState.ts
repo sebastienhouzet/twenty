@@ -1,6 +1,6 @@
 import { createComponentState } from '@/ui/utilities/state/component-state/utils/createComponentState';
 
-export const isPersistingViewScopedState = createComponentState<boolean>({
-  key: 'isPersistingViewScopedState',
+export const isPersistingViewComponentState = createComponentState<boolean>({
+  key: 'isPersistingViewComponentState',
   defaultValue: false,
 });

@@ -9,9 +9,8 @@ import { DropdownScope } from '@/ui/layout/dropdown/scopes/DropdownScope';
 import { EditableFilterDropdownButton } from '@/views/components/EditableFilterDropdownButton';
 import { EditableSortChip } from '@/views/components/EditableSortChip';
 import { ViewBarFilterEffect } from '@/views/components/ViewBarFilterEffect';
+import { useViewStates } from '@/views/hooks/internal/useViewStates';
 import { useViewBar } from '@/views/hooks/useViewBar';
-
-import { useViewScopedStates } from '../hooks/internal/useViewScopedStates';
 
 export type ViewBarDetailsProps = {
   hasFilterButton?: boolean;
@@ -92,37 +91,30 @@ export const ViewBarDetails = ({
   hasFilterButton = false,
   rightComponent,
   filterDropdownId,
-  viewBarId,
 }: ViewBarDetailsProps) => {
   const {
-    currentViewSortsState,
-    currentViewFiltersState,
-    canPersistFiltersSelector,
-    canPersistSortsSelector,
+    canPersistViewSelector,
+    unsavedViewFiltersState,
+    unsavedViewSortsState,
     isViewBarExpandedState,
-  } = useViewScopedStates();
+  } = useViewStates();
 
-  const currentViewSorts = useRecoilValue(currentViewSortsState);
-  const currentViewFilters = useRecoilValue(currentViewFiltersState);
-  const canPersistFilters = useRecoilValue(canPersistFiltersSelector);
-  const canPersistSorts = useRecoilValue(canPersistSortsSelector);
-  const isViewBarExpanded = useRecoilValue(isViewBarExpandedState);
+  const isViewBarExpanded = useRecoilValue(isViewBarExpandedState());
+  const canPersistView = useRecoilValue(canPersistViewSelector());
+  const unsavedViewFilters = useRecoilValue(unsavedViewFiltersState());
+  const unsavedViewSorts = useRecoilValue(unsavedViewSortsState());
+
+  console.log(unsavedViewFilters);
 
   const { resetViewBar } = useViewBar();
-
-  const canPersistView = canPersistFilters || canPersistSorts;
 
   const handleCancelClick = () => {
     resetViewBar();
   };
 
-  const { upsertViewFilter } = useViewBar({
-    viewBarId: viewBarId,
-  });
-
   const shouldExpandViewBar =
     canPersistView ||
-    ((currentViewSorts?.length || currentViewFilters?.length) &&
+    ((unsavedViewSorts?.length || unsavedViewFilters?.length) &&
       isViewBarExpanded);
 
   if (!shouldExpandViewBar) {
@@ -133,15 +125,15 @@ export const ViewBarDetails = ({
     <StyledBar>
       <StyledFilterContainer>
         <StyledChipcontainer>
-          {currentViewSorts?.map((sort) => (
+          {unsavedViewSorts?.map((sort) => (
             <EditableSortChip key={sort.id} viewSort={sort} />
           ))}
-          {!!currentViewSorts?.length && !!currentViewFilters?.length && (
+          {!!unsavedViewSorts?.length && !!unsavedViewFilters?.length && (
             <StyledSeperatorContainer>
               <StyledSeperator />
             </StyledSeperatorContainer>
           )}
-          {currentViewFilters?.map((viewFilter) => (
+          {unsavedViewFilters?.map((viewFilter) => (
             <ObjectFilterDropdownScope
               key={viewFilter.id}
               filterScopeId={viewFilter.fieldMetadataId}
@@ -149,7 +141,6 @@ export const ViewBarDetails = ({
               <DropdownScope dropdownScopeId={viewFilter.fieldMetadataId}>
                 <ViewBarFilterEffect
                   filterDropdownId={viewFilter.fieldMetadataId}
-                  onFilterSelect={upsertViewFilter}
                 />
                 <EditableFilterDropdownButton
                   viewFilter={viewFilter}

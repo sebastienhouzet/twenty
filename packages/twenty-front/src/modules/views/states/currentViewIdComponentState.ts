@@ -1,8 +1,8 @@
 import { createComponentState } from '@/ui/utilities/state/component-state/utils/createComponentState';
 
-export const viewObjectMetadataIdScopeState = createComponentState<
+export const currentViewIdComponentState = createComponentState<
   string | undefined
 >({
-  key: 'viewObjectMetadataIdScopeState',
+  key: 'currentViewIdComponentState',
   defaultValue: undefined,
 });

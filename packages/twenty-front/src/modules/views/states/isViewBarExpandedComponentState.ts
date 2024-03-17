@@ -1,6 +1,6 @@
 import { createComponentState } from '@/ui/utilities/state/component-state/utils/createComponentState';
 
-export const isViewBarExpandedScopedState = createComponentState<boolean>({
-  key: 'isViewBarExpandedScopedState',
+export const isViewBarExpandedComponentState = createComponentState<boolean>({
+  key: 'isViewBarExpandedComponentState',
   defaultValue: true,
 });

@@ -8,14 +8,14 @@ type EditableSortChipProps = {
 };
 
 export const EditableSortChip = ({ viewSort }: EditableSortChipProps) => {
-  const { removeViewSort, upsertViewSort } = useViewBar();
+  const { removeUnsavedViewSort, upsertUnsavedViewSort } = useViewBar();
 
   const handleRemoveClick = () => {
-    removeViewSort(viewSort.fieldMetadataId);
+    removeUnsavedViewSort(viewSort.fieldMetadataId);
   };
 
   const handleClick = () => {
-    upsertViewSort({
+    upsertUnsavedViewSort({
       ...viewSort,
       direction: viewSort.direction === 'asc' ? 'desc' : 'asc',
     });

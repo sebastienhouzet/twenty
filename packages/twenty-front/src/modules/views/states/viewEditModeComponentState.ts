@@ -1,8 +1,8 @@
 import { createComponentState } from '@/ui/utilities/state/component-state/utils/createComponentState';
 
-export const viewEditModeScopedState = createComponentState<
+export const viewEditModeComponentState = createComponentState<
   'none' | 'edit' | 'create'
 >({
-  key: 'viewEditModeScopedState',
+  key: 'viewEditModeComponentState',
   defaultValue: 'none',
 });
